@@ -2,7 +2,7 @@ type Project = {
     name: string;
     description: string;
     link: string;
-    video: string;
+    images: string[];
     id: string;
 };
 
@@ -29,45 +29,49 @@ type SocialLink = {
 
 export const PROJECTS: Project[] = [
     {
-        name: "Motion Primitives Pro",
-        description: "Advanced components and templates to craft beautiful websites.",
-        link: "https://pro.motion-primitives.com/",
-        video: "https://res.cloudinary.com/read-cv/video/upload/t_v_b/v1/1/profileItems/W2azTw5BVbMXfj7F53G92hMVIn32/newProfileItem/d898be8a-7037-4c71-af0c-8997239b050d.mp4?_a=DATAdtAAZAA0",
+        name: "University Administrative Platform",
+        description: "Bridging the gap between students, lecturers, and administration.",
+        link: "#",
+        images: [
+            "/images/university-administrative-platform-1.png",
+            "/images/university-administrative-platform-2.png",
+            "/images/university-administrative-platform-3.png",
+        ],
         id: "project1",
     },
     {
-        name: "Motion Primitives",
-        description: "UI kit to make beautiful, animated interfaces.",
-        link: "https://motion-primitives.com/",
-        video: "https://res.cloudinary.com/read-cv/video/upload/t_v_b/v1/1/profileItems/W2azTw5BVbMXfj7F53G92hMVIn32/XSfIvT7BUWbPRXhrbLed/ee6871c9-8400-49d2-8be9-e32675eabf7e.mp4?_a=DATAdtAAZAA0",
+        name: "Hotel ERP System",
+        description: "Comprehensive management solution for hotel operations.",
+        link: "#",
+        images: ["/images/hotel-1.png", "/images/hotel-2.png", "/images/hotel-3.png"],
         id: "project2",
+    },
+    {
+        name: "Food Ordering & Delivery",
+        description:
+            "Performant web based food marketplace and ordering system. Basically UberEats.",
+        link: "#",
+        images: ["/images/food-ordering.png"],
+        id: "project3",
     },
 ];
 
 export const WORK_EXPERIENCE: WorkExperience[] = [
     {
-        company: "Reglazed Studio",
-        title: "CEO",
-        start: "2024",
+        company: "Open Mind Digital",
+        title: "Principal Software Developer",
+        start: "2018",
         end: "Present",
-        link: "https://ibelick.com",
+        link: "#",
         id: "work1",
     },
     {
         company: "Freelance",
-        title: "Design Engineer",
+        title: "Software Developer",
         start: "2022",
-        end: "2024",
-        link: "https://ibelick.com",
-        id: "work2",
-    },
-    {
-        company: "Freelance",
-        title: "Front-end Developer",
-        start: "2017",
         end: "Present",
-        link: "https://ibelick.com",
-        id: "work3",
+        link: "#",
+        id: "work2",
     },
 ];
 

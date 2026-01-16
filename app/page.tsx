@@ -1,18 +1,17 @@
 "use client";
-import { motion } from "motion/react";
-import { XIcon } from "lucide-react";
-import { Spotlight } from "@/components/ui/spotlight";
 import { Magnetic } from "@/components/ui/magnetic";
 import {
     MorphingDialog,
-    MorphingDialogTrigger,
-    MorphingDialogContent,
     MorphingDialogClose,
     MorphingDialogContainer,
+    MorphingDialogContent,
+    MorphingDialogTrigger,
 } from "@/components/ui/morphing-dialog";
-import Link from "next/link";
-import { AnimatedBackground } from "@/components/ui/animated-background";
-import { PROJECTS, WORK_EXPERIENCE, BLOG_POSTS, EMAIL, SOCIAL_LINKS } from "./data";
+import { Spotlight } from "@/components/ui/spotlight";
+import { ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-react";
+import { motion } from "motion/react";
+import { useState } from "react";
+import { PROJECTS, WORK_EXPERIENCE } from "./data";
 
 const VARIANTS_CONTAINER = {
     hidden: { opacity: 0 },
@@ -33,11 +32,22 @@ const TRANSITION_SECTION = {
     duration: 0.3,
 };
 
-type ProjectVideoProps = {
-    src: string;
+type ProjectCarouselProps = {
+    images: string[];
+    alt: string;
 };
 
-function ProjectVideo({ src }: ProjectVideoProps) {
+function ProjectCarousel({ images, alt }: ProjectCarouselProps) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const goToPrevious = () => {
+        setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
+    const goToNext = () => {
+        setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
     return (
         <MorphingDialog
             transition={{
@@ -47,23 +57,53 @@ function ProjectVideo({ src }: ProjectVideoProps) {
             }}
         >
             <MorphingDialogTrigger>
-                <video
-                    src={src}
-                    autoPlay
-                    loop
-                    muted
-                    className="aspect-video w-full cursor-zoom-in rounded-xl"
+                <img
+                    src={images[0]}
+                    alt={alt}
+                    className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
                 />
             </MorphingDialogTrigger>
             <MorphingDialogContainer>
                 <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
-                    <video
-                        src={src}
-                        autoPlay
-                        loop
-                        muted
-                        className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh]"
-                    />
+                    <div className="relative">
+                        <img
+                            src={images[currentIndex]}
+                            alt={`${alt} - Image ${currentIndex + 1}`}
+                            className="aspect-video h-[50vh] w-full rounded-xl object-contain md:h-[70vh]"
+                        />
+                        {images.length > 1 && (
+                            <>
+                                <button
+                                    onClick={goToPrevious}
+                                    className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full border bg-white p-2 shadow transition-colors hover:bg-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                                    aria-label="Previous image"
+                                >
+                                    <ChevronLeftIcon className="h-6 w-6 text-zinc-900 dark:text-zinc-100" />
+                                </button>
+                                <button
+                                    onClick={goToNext}
+                                    className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full border bg-white p-2 shadow transition-colors hover:bg-zinc-100 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                                    aria-label="Next image"
+                                >
+                                    <ChevronRightIcon className="h-6 w-6 text-zinc-900 dark:text-zinc-100" />
+                                </button>
+                                <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2 rounded-full bg-white p-2 shadow dark:bg-black">
+                                    {images.map((_, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setCurrentIndex(index)}
+                                            className={`h-2 w-2 rounded-full transition-all ${
+                                                index === currentIndex
+                                                    ? "w-4 bg-zinc-900 dark:bg-zinc-100"
+                                                    : "bg-zinc-400 dark:bg-zinc-600"
+                                            }`}
+                                            aria-label={`Go to image ${index + 1}`}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </MorphingDialogContent>
                 <MorphingDialogClose
                     className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white p-1"
@@ -120,10 +160,15 @@ export default function Personal() {
             animate="visible"
         >
             <motion.section variants={VARIANTS_SECTION} transition={TRANSITION_SECTION}>
-                <div className="flex-1">
+                <div className="flex-1 space-y-6">
                     <p className="text-zinc-600 dark:text-zinc-400">
-                        Focused on creating intuitive and performant web experiences. Bridging the
-                        gap between design and development.
+                        {new Date().getFullYear() - 2018} years of professional experience,
+                        specializing in building web applications with a focus on performance,
+                        accessibility, and user experience.
+                    </p>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                        Focused on delivering high-quality solutions that meet client needs and
+                        exceed expectations.
                     </p>
                 </div>
             </motion.section>
@@ -134,7 +179,7 @@ export default function Personal() {
                     {PROJECTS.map((project) => (
                         <div key={project.name} className="space-y-2">
                             <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                                <ProjectVideo src={project.video} />
+                                <ProjectCarousel images={project.images} alt={project.name} />
                             </div>
                             <div className="px-1">
                                 <a
@@ -188,7 +233,7 @@ export default function Personal() {
                     ))}
                 </div>
             </motion.section>
-
+            {/*
             <motion.section variants={VARIANTS_SECTION} transition={TRANSITION_SECTION}>
                 <h3 className="mb-3 text-lg font-medium">Blog</h3>
                 <div className="flex flex-col space-y-0">
@@ -218,9 +263,9 @@ export default function Personal() {
                         ))}
                     </AnimatedBackground>
                 </div>
-            </motion.section>
+            </motion.section> */}
 
-            <motion.section variants={VARIANTS_SECTION} transition={TRANSITION_SECTION}>
+            {/* <motion.section variants={VARIANTS_SECTION} transition={TRANSITION_SECTION}>
                 <h3 className="mb-5 text-lg font-medium">Connect</h3>
                 <p className="mb-5 text-zinc-600 dark:text-zinc-400">
                     Feel free to contact me at{" "}
@@ -235,7 +280,7 @@ export default function Personal() {
                         </MagneticSocialLink>
                     ))}
                 </div>
-            </motion.section>
+            </motion.section> */}
         </motion.main>
     );
 }
